@@ -1,4 +1,4 @@
-package br.gov.caixa.megasena.batch.model;
+package br.gov.caixa.megasena.batch.model.dto;
 
 import java.util.List;
 

@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static br.gov.caixa.megasena.batch.configuration.LotoFacilJobConfig.HEADER_FILE_LOTOFACIL;
+
 @Configuration
 @RequiredArgsConstructor
 public class LotofacilStepConfig {
@@ -40,14 +42,14 @@ public class LotofacilStepConfig {
     @Bean
     public Step gerarJogoLotofacilStep(JobRepository jobRepository, PlatformTransactionManager transactionManager, DataSource dataSource){
         LocalDateTime agora = LocalDateTime.now();
-        return new StepBuilder("lotofacil", jobRepository )
+        return new StepBuilder("lotofacil-probabilistica-step", jobRepository )
                 .< List<Integer>, String >chunk(1000, transactionManager)
                 .reader(new CombinacaoProbabilisticaReader(carregarTodosJogosDoBanco(dataSource)))
                 .processor(new GeradorJogosProcessor(dataJogo) )
                 .writer(new FlatFileItemWriterBuilder<String>()
                 .name("jogosWriter")
                 .resource(new FileSystemResource(String.format(filePathOutput + "lotofacil/jogos-lf-probabilidade-%s.csv", formatter.format(agora))))
-                .headerCallback(header -> header.append("Jogo,Bola1,Bola2,Bola3,Bola4,Bola5,Bola6,Bola7,Bola8,Bola9,Bola10,Bola11,Bola12,Bola13,Bola14,Bola15"))
+                .headerCallback(header -> header.append(HEADER_FILE_LOTOFACIL))
                 .lineAggregator(item -> item)
                 .footerCallback(footer -> footer.append("Boa Sorte"))
                 .build())
@@ -57,14 +59,14 @@ public class LotofacilStepConfig {
     @Bean
     public Step gerarJogoHistoricoLotofacilStep(JobRepository jobRepository, PlatformTransactionManager transactionManager, DataSource dataSource){
         LocalDateTime agora = LocalDateTime.now();
-        return new StepBuilder("lotofacil", jobRepository )
+        return new StepBuilder("lotofacil-historico-step", jobRepository )
                 .< List<Integer>, String >chunk(1000, transactionManager)
                 .reader(new CombinacaoHistoricoReader(carregarTodosJogosDoBanco(dataSource),100))
                 .processor(new GeradorJogosProcessor(dataJogo))
                 .writer(new FlatFileItemWriterBuilder<String>()
                         .name("jogosWriter")
                         .resource(new FileSystemResource(String.format(filePathOutput + "lotofacil/historico/jogos-lf-historico-%s.csv", formatter.format(agora))))
-                        .headerCallback(header -> header.append("Jogo,Bola1,Bola2,Bola3,Bola4,Bola5,Bola6,Bola7,Bola8,Bola9,Bola10,Bola11,Bola12,Bola13,Bola14,Bola15"))
+                        .headerCallback(header -> header.append(HEADER_FILE_LOTOFACIL))
                         .lineAggregator(item -> item)
                         .footerCallback(footer -> footer.append("Boa Sorte"))
                         .build())

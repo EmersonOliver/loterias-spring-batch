@@ -1,8 +1,8 @@
 package br.gov.caixa.megasena.batch.tasklet;
 
-import br.gov.caixa.megasena.batch.model.ConcursoDTO;
-import br.gov.caixa.megasena.batch.repository.StrategyRepository;
-import br.gov.caixa.megasena.batch.repository.StrategyRepositoryFactory;
+import br.gov.caixa.megasena.batch.model.dto.ConcursoDTO;
+import br.gov.caixa.megasena.batch.strategy.StrategyRepository;
+import br.gov.caixa.megasena.batch.strategy.StrategyRepositoryFactory;
 import br.gov.caixa.megasena.batch.service.ConcursoClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

@@ -1,4 +1,4 @@
-package br.gov.caixa.megasena.batch.configuration;
+package br.gov.caixa.megasena.batch.configuration.restclient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

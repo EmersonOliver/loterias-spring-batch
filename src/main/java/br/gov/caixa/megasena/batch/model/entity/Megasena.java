@@ -1,4 +1,4 @@
-package br.gov.caixa.megasena.batch.model;
+package br.gov.caixa.megasena.batch.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,12 +17,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_lotofacil")
-public class Lotofacil implements Serializable {
-
+@Table(name = "tb_megasena")
+public class Megasena implements Serializable {
 
     @Id
-    @Column
+    @Column(name = "concurso")
     private Long concurso;
 
     @Column
@@ -45,32 +44,5 @@ public class Lotofacil implements Serializable {
 
     @Column
     private Integer bola6;
-
-    @Column
-    private Integer bola7;
-
-    @Column
-    private Integer bola8;
-
-    @Column
-    private Integer bola9;
-
-    @Column
-    private Integer bola10;
-
-    @Column
-    private Integer bola11;
-
-    @Column
-    private Integer bola12;
-
-    @Column
-    private Integer bola13;
-
-    @Column
-    private Integer bola14;
-
-    @Column
-    private Integer bola15;
 
 }

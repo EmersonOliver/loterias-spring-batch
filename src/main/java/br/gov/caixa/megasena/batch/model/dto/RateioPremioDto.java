@@ -1,4 +1,4 @@
-package br.gov.caixa.megasena.batch.model;
+package br.gov.caixa.megasena.batch.model.dto;
 
 public record RateioPremioDto(
         String descricaoFaixa,

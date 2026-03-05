@@ -2,9 +2,8 @@ package br.gov.caixa.megasena.batch.steps;
 
 import br.gov.caixa.megasena.batch.model.MegasenaModel;
 import br.gov.caixa.megasena.batch.processor.GeradorJogosProcessor;
-import br.gov.caixa.megasena.batch.reader.CombinacaoMegasenaItemReader;
-import br.gov.caixa.megasena.batch.reader.CombinacaoProbabilisticaMegasenaReader;
-import br.gov.caixa.megasena.batch.tasklet.AtualizarConcursosLoteriasTasklet;
+import br.gov.caixa.megasena.batch.reader.CombinacaoHistoricoReader;
+import br.gov.caixa.megasena.batch.reader.CombinacaoProbabilisticaReader;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -21,6 +20,8 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static br.gov.caixa.megasena.batch.configuration.MegasenaJobConfig.HEADER_FILE_MEGASENA;
 
 @Configuration
 public class MegaSenaStepsConfig {
@@ -40,17 +41,16 @@ public class MegaSenaStepsConfig {
     @Bean
     public Step gerarHistoricoJogoMegasenaStep(JobRepository jobRepository,
                                                PlatformTransactionManager transactionManager,
-                                               ItemProcessor<List<Integer>, String> geradorJogosProcessor,
                                                DataSource dataSource) {
         LocalDateTime agora = LocalDateTime.now();
-        return new StepBuilder("gerarJogosStepBean", jobRepository)
+        return new StepBuilder("megasena-historico-step", jobRepository)
                 .<List<Integer>, String>chunk(100, transactionManager)
-                .reader(new CombinacaoMegasenaItemReader(carregarTodosJogosDoBanco(dataSource), 20))
-                .processor(geradorJogosProcessor)
+                .reader(new CombinacaoHistoricoReader(carregarTodosJogosDoBanco(dataSource), 20))
+                .processor(new GeradorJogosProcessor(dataJogo))
                 .writer(new FlatFileItemWriterBuilder<String>()
                         .name("jogosWriter")
                         .resource(new FileSystemResource(String.format(filePathOutput + "megasena/historico/jogos-baseado-historico-ms-%s.csv", formatter.format(agora))))
-                        .headerCallback(header -> header.append("Jogo,Bola1,Bola2,Bola3,Bola4,Bola5,Bola6"))
+                        .headerCallback(header -> header.append(HEADER_FILE_MEGASENA))
                         .lineAggregator(item -> item)
                         .footerCallback(footer -> footer.append("Boa Sorte"))
                         .build())
@@ -62,14 +62,14 @@ public class MegaSenaStepsConfig {
                                                    PlatformTransactionManager transactionManager,
                                                    DataSource dataSource) {
         LocalDateTime agora = LocalDateTime.now();
-        return new StepBuilder("gerarJogosPorProbabilidadeBean", jobRepository)
+        return new StepBuilder("megasena-probabilistica-step", jobRepository)
                 .<List<Integer>, String>chunk(100, transactionManager)
-                .reader(new CombinacaoProbabilisticaMegasenaReader(carregarTodosJogosDoBanco(dataSource)))
+                .reader(new CombinacaoProbabilisticaReader(carregarTodosJogosDoBanco(dataSource)))
                 .processor(new GeradorJogosProcessor(dataJogo))
                 .writer(new FlatFileItemWriterBuilder<String>()
                         .name("jogosWriter")
                         .resource(new FileSystemResource(String.format(filePathOutput + "megasena/jogos-ms-probabilidade-%s.csv", formatter.format(agora))))
-                        .headerCallback(header -> header.append("Jogo,Data,Bola1,Bola2,Bola3,Bola4,Bola5,Bola6"))
+                        .headerCallback(header -> header.append(HEADER_FILE_MEGASENA))
                         .lineAggregator(item -> item)
                         .footerCallback(footer -> footer.append("Boa Sorte"))
                         .build())

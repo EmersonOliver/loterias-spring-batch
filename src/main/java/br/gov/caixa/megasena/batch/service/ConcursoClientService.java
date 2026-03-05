@@ -1,6 +1,6 @@
 package br.gov.caixa.megasena.batch.service;
 
-import br.gov.caixa.megasena.batch.model.ConcursoDTO;
+import br.gov.caixa.megasena.batch.model.dto.ConcursoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;

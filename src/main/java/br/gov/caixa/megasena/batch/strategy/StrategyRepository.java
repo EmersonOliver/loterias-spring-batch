@@ -1,6 +1,6 @@
-package br.gov.caixa.megasena.batch.repository;
+package br.gov.caixa.megasena.batch.strategy;
 
-import br.gov.caixa.megasena.batch.model.ConcursoDTO;
+import br.gov.caixa.megasena.batch.model.dto.ConcursoDTO;
 
 import java.util.Optional;
 
