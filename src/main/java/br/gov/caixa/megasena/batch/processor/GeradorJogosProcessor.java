@@ -28,8 +28,8 @@ public class GeradorJogosProcessor implements ItemProcessor<List<Integer>, Strin
     @Override
     public String process(List<Integer> jogo) throws Exception {
         String result = jogo.stream()
-                .map(i -> String.format("%02d", i))
+                .map(i -> String.format("%02d\t", i))
                 .collect(Collectors.joining(","));
-        return MessageFormat.format("{0},{1}", count.incrementAndGet(), result);
+        return MessageFormat.format("{0}\t,{1}", count.incrementAndGet(), result);
     }
 }

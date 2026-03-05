@@ -1,4 +1,4 @@
-package br.gov.caixa.megasena.batch.model;
+package br.gov.caixa.megasena.batch.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,14 +14,14 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "tb_quina")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "tb_megasena")
-public class Megasena implements Serializable {
+public class Quina implements Serializable {
 
     @Id
-    @Column(name = "concurso")
+    @Column
     private Long concurso;
 
     @Column
@@ -41,8 +41,4 @@ public class Megasena implements Serializable {
 
     @Column
     private Integer bola5;
-
-    @Column
-    private Integer bola6;
-
 }

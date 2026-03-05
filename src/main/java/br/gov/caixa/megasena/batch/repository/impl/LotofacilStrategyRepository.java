@@ -1,16 +1,17 @@
 package br.gov.caixa.megasena.batch.repository.impl;
 
-import br.gov.caixa.megasena.batch.model.ConcursoDTO;
-import br.gov.caixa.megasena.batch.model.Lotofacil;
+import br.gov.caixa.megasena.batch.model.dto.ConcursoDTO;
+import br.gov.caixa.megasena.batch.model.entity.Lotofacil;
 import br.gov.caixa.megasena.batch.repository.LotofacilRepository;
-import br.gov.caixa.megasena.batch.repository.StrategyRepository;
+import br.gov.caixa.megasena.batch.strategy.StrategyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import static br.gov.caixa.megasena.batch.model.utils.LoteriasUtils.getDataApuracao;
 
 @RequiredArgsConstructor
 @Component("lotofacilStrategy")
@@ -32,8 +33,7 @@ public class LotofacilStrategyRepository implements StrategyRepository<Lotofacil
 
     @Override
     public Lotofacil mapperItem(ConcursoDTO concurso) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate apuracao = LocalDate.parse(concurso.dataApuracao(), formatter);
+        LocalDate apuracao = getDataApuracao(concurso.dataApuracao());
         Lotofacil model = new Lotofacil();
         model.setConcurso(concurso.numero().longValue());
         model.setData(apuracao);

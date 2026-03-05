@@ -1,4 +1,4 @@
-package br.gov.caixa.megasena.batch.repository;
+package br.gov.caixa.megasena.batch.strategy;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,7 @@ public class StrategyRepositoryFactory {
         return switch (jobName) {
             case "megasena" -> strategies.get("megasenaStrategy");
             case "lotofacil" -> strategies.get("lotofacilStrategy");
+            case "quina"-> strategies.get("quinaStrategy");
             default -> throw new IllegalArgumentException("Job não encontrado: " + jobName);
         };
     }

@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MegasenaJobConfig {
 
+    public static final String HEADER_FILE_MEGASENA = "SEQ\t,Bola1\t,Bola2\t,Bola3\t,Bola4\t,Bola5\t,Bola6\t";
+
 
     @Bean
     public Job megasenaJob(JobRepository jobRepository,
                            Step alimentarBase,
-                           Step contador,
                            Step gerarHistoricoJogoMegasenaStep,
                            Step gerarJogosMegasenaPorProbabilidade) {
         return new JobBuilder("megasena", jobRepository)
                 .start(alimentarBase)
-                .next(contador)
                 .next(gerarHistoricoJogoMegasenaStep)
                 .next(gerarJogosMegasenaPorProbabilidade)
                 .incrementer(new RunIdIncrementer())
